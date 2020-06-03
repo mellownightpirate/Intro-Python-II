@@ -46,10 +46,10 @@ room["treasure"].s_to = room["narrow"]
 #
 
 # Make a new player object that is currently in the 'outside' room.
-userControl = input("Enter your name: ")
+readyPlayerOne = input("Enter your name: ")
 
-readyPlayerOne = Player(userControl, room["outside"])
-print(readyPlayerOne)
+playerOne = Player(readyPlayerOne, room["outside"])
+print(playerOne)
 
 # Write a loop that:
 #
@@ -61,13 +61,49 @@ print(readyPlayerOne)
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
-if userControl == "q":
-    exit()
 
-print("Press q to quit")
+
+print("All you have to do to wake up again is press 'q'")
 
 
 redPill = True
+if redPill == False:
+    print(f"***{readyPlayerOne} wakes up*** Man, that was a weird dream!")
+
+playerControls = ["n", "e", "s", "w", "q"]
+
 
 while redPill == True:
-    print(f"")
+    print(f"You're currently standing in the {playerOne.current_room.name}. \n{playerOne.current_room.description}.")
+    moves = input("Which way shall we go?")
+    if moves == "q":
+        exit()
+    elif moves == "n":
+        if playerOne.current_room == room["outside"]:
+            playerOne.current_room = getattr(playerOne.current_room, 'n_to')
+        elif playerOne.current_room == room["foyer"]:
+            playerOne.current_room = getattr(playerOne.current_room, 'n_to')
+        elif playerOne.current_room == room["narrow"]:
+            playerOne.current_room = getattr(playerOne.current_room, 'n_to')
+        else:
+            print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
+    elif moves == "e":
+        if playerOne.current_room == room["foyer"]:
+            playerOne.current_room = getattr(playerOne.current_room, 'e_to')
+        else:
+            print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
+    elif moves == "s":
+        if playerOne.current_room == room["foyer"]:
+            playerOne.current_room = getattr(playerOne.current_room, 's_to')
+        if playerOne.current_room == room["overlook"]:
+            playerOne.current_room = getattr(playerOne.current_room, 's_to')
+        if playerOne.current_room == room["treasure"]:
+            playerOne.current_room = getattr(playerOne.current_room, 's_to')
+        else:
+            print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
+    elif moves == "w":
+        if playerOne.current_room == room["narrow"]:
+            playerOne.current_room = getattr(playerOne.current_room, 'w_to')
+        else:
+            print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
+
