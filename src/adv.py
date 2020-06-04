@@ -93,22 +93,23 @@ while redPill == True:
     if move == "look around":
         if len(player.current_room.items) > 0:
             print(f"{player.current_room.items}")
-            print(f"If you would like to pick up the item, type it's name.")
+            print(f"If you would like to pick up the item, type get followed by the item's name.")
             continue
         else:
             print(f"Let's move on, there's nothing to gain here.")
-    getItem = move.split(" ")[0]
-    if getItem in (player.current_room.items):
-            player.get(getItem)
-            player.current_room.itemTaken(getItem)
-            print(f"{getItem} added to your inventory.")       
+    if "get" in move:
+        on_take = move.split(" ")[1]
+        if on_take in (player.current_room.items):
+            player.get(on_take)
+            player.current_room.itemTaken(on_take)
+        print(f"{on_take} added to your inventory. If you want to drop the item, type drop followed by the item's name.")       
     if "drop" in move:
         if len(player.inventory) > 0:
-            dropItem = move.split(" ")[1]
-            if dropItem in (player.inventory):
-                player.drop(dropItem)
-                player.current_room.itemDropped(dropItem)
-            print(f"You've dropped {dropItem}")
+            on_drop = move.split(" ")[1]
+            if on_drop in (player.inventory):
+                player.drop(on_drop)
+                player.current_room.itemDropped(on_drop)
+            print(f"You've dropped {on_drop}")
         else:
             print(f"You're not carrying anything at the moment.")
     elif move == "n":
