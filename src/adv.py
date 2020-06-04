@@ -67,14 +67,12 @@ print("All you have to do to wake up again is press 'q'")
 
 
 redPill = True
-if redPill == False:
-    print(f"***{readyPlayerOne} wakes up*** Man, that was a weird dream!")
 
 playerControls = ["n", "e", "s", "w", "q"]
 
 
 while redPill == True:
-    print(f"You're currently standing in the {playerOne.current_room.name}. \n{playerOne.current_room.description}.")
+    print(f"{readyPlayerOne}, you're currently standing in the {playerOne.current_room.name}. \n{playerOne.current_room.description}.")
     moves = input("Which way shall we go?")
     if moves == "q":
         exit()
@@ -106,4 +104,5 @@ while redPill == True:
             playerOne.current_room = getattr(playerOne.current_room, 'w_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
-
+if redPill == False:
+    print(f"***{readyPlayerOne} wakes up*** What a weird dream!")
