@@ -80,10 +80,6 @@ checkItems = player.checkInventory()
 
 #Game Mechanics
 
-#Inventory
-
-
-#Player move
 while redPill == True:
     print(f"{name}, you're currently standing in the {player.current_room.name}. \n{player.current_room.description}.")
     move = input("Which way shall we go?")
@@ -104,11 +100,13 @@ while redPill == True:
     getItem = move.split(" ")[0]
     if getItem in (player.current_room.items):
             player.get(getItem)
-            print(f"{getItem} added to your inventory")       
-    if move == "drop items":
+            print(f"{getItem} added to your inventory.")       
+    if "drop" in move:
         if len(player.inventory) > 0:
-            player.drop(player.inventory[0])
-            print(f"You've dropped all of your items")
+            dropItem = move.split(" ")[1]
+            if dropItem in (player.inventory):
+                player.drop(dropItem)
+            print(f"You've dropped {dropItem}")
         else:
             print(f"You're not carrying anything at the moment.")
     elif move == "n":
