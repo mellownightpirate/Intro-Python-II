@@ -1,32 +1,40 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
 room = {
-    "outside": Room("Outside Cave Entrance", "North of you, the cave mount beckons"),
+    "outside": Room("Outside Cave Entrance", "North of you, the cave mount beckons", ["Saber"]),
     "foyer": Room(
         "Foyer",
         """Dim light filters in from the south. Dusty
-passages run north and east.""",
+passages run north and east.""", ["spoon"]
     ),
     "overlook": Room(
         "Grand Overlook",
         """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm.""",
+the distance, but there is no way across the chasm.""", ["helmet"]
     ),
     "narrow": Room(
         "Narrow Passage",
         """The narrow passage bends here from west
-to north. The smell of gold permeates the air.""",
+to north. The smell of gold permeates the air.""", []
     ),
     "treasure": Room(
         "Treasure Chamber",
         """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south.""",
+earlier adventurers. The only exit is to the south.""", ["ruby"]
     ),
+}
+
+items = {
+    "saber": Item("Saber", "A classy weapon to protect you from any foes"),
+    "helmet": Item("Helmet", "Proects you from overhead damage"),
+    "spoon": Item("Spoon", "This isn't worth very much"),
+    "ruby": Item("Ruby", "Mystic and sacred stone worth more than you can ever imagine.")
 }
 
 
@@ -46,11 +54,6 @@ room["treasure"].s_to = room["narrow"]
 #
 
 # Make a new player object that is currently in the 'outside' room.
-readyPlayerOne = input("Enter your name: ")
-
-playerOne = Player(readyPlayerOne, room["outside"])
-print(playerOne)
-
 # Write a loop that:
 #
 # * Prints the current room name
@@ -62,47 +65,67 @@ print(playerOne)
 #
 # If the user enters "q", quit the game.
 
+#Start Game
+name = input("Enter your name: ")
 
+player = Player(name, room["outside"])
+print(player)
 print("All you have to do to wake up again is press 'q'")
 
-
+#Game Parameters
 redPill = True
-
 playerControls = ["n", "e", "s", "w", "q"]
+checkItems = player.checkInventory()
+
+#Game Mechanics
+
+#Inventory
 
 
+#Player Moves
 while redPill == True:
-    print(f"{readyPlayerOne}, you're currently standing in the {playerOne.current_room.name}. \n{playerOne.current_room.description}.")
+    print(f"{name}, you're currently standing in the {player.current_room.name}. \n{player.current_room.description}.")
     moves = input("Which way shall we go?")
     if moves == "q":
         exit()
+    if moves == "check items":
+        if len(checkItems):
+            print(f"These are the items you're carrying: {checkItems}")
+        else:
+            print(f"You're currently not holding any items. Anyway, back to where we were...")
+    if moves == "get items":
+        if len(player.current_room.items) > 0:
+            player.get(player.current_room.items)
+            print(f"{player.current_room.items} has just been added to your inventory")
+        else:
+            print(f"Let's move on, there's nothing to gain here.")
     elif moves == "n":
-        if playerOne.current_room == room["outside"]:
-            playerOne.current_room = getattr(playerOne.current_room, 'n_to')
-        elif playerOne.current_room == room["foyer"]:
-            playerOne.current_room = getattr(playerOne.current_room, 'n_to')
-        elif playerOne.current_room == room["narrow"]:
-            playerOne.current_room = getattr(playerOne.current_room, 'n_to')
+        if player.current_room == room["outside"]:
+            player.current_room = getattr(player.current_room, 'n_to')
+        elif player.current_room == room["foyer"]:
+            player.current_room = getattr(player.current_room, 'n_to')
+        elif player.current_room == room["narrow"]:
+            player.current_room = getattr(player.current_room, 'n_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
     elif moves == "e":
-        if playerOne.current_room == room["foyer"]:
-            playerOne.current_room = getattr(playerOne.current_room, 'e_to')
+        if player.current_room == room["foyer"]:
+            player.current_room = getattr(player.current_room, 'e_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
     elif moves == "s":
-        if playerOne.current_room == room["foyer"]:
-            playerOne.current_room = getattr(playerOne.current_room, 's_to')
-        if playerOne.current_room == room["overlook"]:
-            playerOne.current_room = getattr(playerOne.current_room, 's_to')
-        if playerOne.current_room == room["treasure"]:
-            playerOne.current_room = getattr(playerOne.current_room, 's_to')
+        if player.current_room == room["foyer"]:
+            player.current_room = getattr(player.current_room, 's_to')
+        if player.current_room == room["overlook"]:
+            player.current_room = getattr(player.current_room, 's_to')
+        if player.current_room == room["treasure"]:
+            player.current_room = getattr(player.current_room, 's_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
     elif moves == "w":
-        if playerOne.current_room == room["narrow"]:
-            playerOne.current_room = getattr(playerOne.current_room, 'w_to')
+        if player.current_room == room["narrow"]:
+            player.current_room = getattr(player.current_room, 'w_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
 if redPill == False:
-    print(f"***{readyPlayerOne} wakes up*** What a weird dream!")
+    print(f"***{name} wakes up*** What a weird dream!")
