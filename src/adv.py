@@ -100,12 +100,14 @@ while redPill == True:
     getItem = move.split(" ")[0]
     if getItem in (player.current_room.items):
             player.get(getItem)
+            player.current_room.itemTaken(getItem)
             print(f"{getItem} added to your inventory.")       
     if "drop" in move:
         if len(player.inventory) > 0:
             dropItem = move.split(" ")[1]
             if dropItem in (player.inventory):
                 player.drop(dropItem)
+                player.current_room.itemDropped(dropItem)
             print(f"You've dropped {dropItem}")
         else:
             print(f"You're not carrying anything at the moment.")
