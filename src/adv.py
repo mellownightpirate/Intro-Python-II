@@ -9,13 +9,13 @@ room = {
     "foyer": Room(
         "Foyer",
         """Dim light filters in from the south. Dusty
-passages run north and east.""", ["spoon"]
+passages run north and east.""", ["Spoon"]
     ),
     "overlook": Room(
         "Grand Overlook",
         """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm.""", ["helmet"]
+the distance, but there is no way across the chasm.""", ["Helmet"]
     ),
     "narrow": Room(
         "Narrow Passage",
@@ -26,7 +26,7 @@ to north. The smell of gold permeates the air.""", []
         "Treasure Chamber",
         """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south.""", ["ruby"]
+earlier adventurers. The only exit is to the south.""", ["Map", "Shield"]
     ),
 }
 
@@ -34,7 +34,8 @@ items = {
     "saber": Item("Saber", "A classy weapon to protect you from any foes"),
     "helmet": Item("Helmet", "Proects you from overhead damage"),
     "spoon": Item("Spoon", "This isn't worth very much"),
-    "ruby": Item("Ruby", "Mystic and sacred stone worth more than you can ever imagine.")
+    "shield": Item("Shield", "Useful to defend against any foes"),
+    "map": Item("Map", "A guide to your next adventure!")
 }
 
 
@@ -82,24 +83,35 @@ checkItems = player.checkInventory()
 #Inventory
 
 
-#Player Moves
+#Player move
 while redPill == True:
     print(f"{name}, you're currently standing in the {player.current_room.name}. \n{player.current_room.description}.")
-    moves = input("Which way shall we go?")
-    if moves == "q":
+    move = input("Which way shall we go?")
+    if move == "q":
         exit()
-    if moves == "check items":
+    if move == "check items":
         if len(checkItems):
             print(f"These are the items you're carrying: {checkItems}")
         else:
             print(f"You're currently not holding any items. Anyway, back to where we were...")
-    if moves == "get items":
+    if move == "look around":
         if len(player.current_room.items) > 0:
-            player.get(player.current_room.items)
-            print(f"{player.current_room.items} has just been added to your inventory")
+            print(f"{player.current_room.items}")
+            print(f"If you would like to pick up the item, type it's name.")
+            continue
         else:
             print(f"Let's move on, there's nothing to gain here.")
-    elif moves == "n":
+    getItem = move.split(" ")[0]
+    if getItem in (player.current_room.items):
+            player.get(getItem)
+            print(f"{getItem} added to your inventory")       
+    if move == "drop items":
+        if len(player.inventory) > 0:
+            player.drop(player.inventory[0])
+            print(f"You've dropped all of your items")
+        else:
+            print(f"You're not carrying anything at the moment.")
+    elif move == "n":
         if player.current_room == room["outside"]:
             player.current_room = getattr(player.current_room, 'n_to')
         elif player.current_room == room["foyer"]:
@@ -108,12 +120,12 @@ while redPill == True:
             player.current_room = getattr(player.current_room, 'n_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
-    elif moves == "e":
+    elif move == "e":
         if player.current_room == room["foyer"]:
             player.current_room = getattr(player.current_room, 'e_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
-    elif moves == "s":
+    elif move == "s":
         if player.current_room == room["foyer"]:
             player.current_room = getattr(player.current_room, 's_to')
         if player.current_room == room["overlook"]:
@@ -122,7 +134,7 @@ while redPill == True:
             player.current_room = getattr(player.current_room, 's_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
-    elif moves == "w":
+    elif move == "w":
         if player.current_room == room["narrow"]:
             player.current_room = getattr(player.current_room, 'w_to')
         else:
