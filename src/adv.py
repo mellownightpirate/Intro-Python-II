@@ -28,6 +28,10 @@ to north. The smell of gold permeates the air.""", []
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south.""", ["Map", "Shield"]
     ),
+    "trapdoor": Room(
+        "Trapdoor",
+        """You've found a hidden room that actually has The Count Of Monte Cristo's treasure!""", ["Treasure"]
+    ),
 }
 
 items = {
@@ -35,7 +39,8 @@ items = {
     "helmet": Item("Helmet", "Proects you from overhead damage"),
     "spoon": Item("Spoon", "This isn't worth very much"),
     "shield": Item("Shield", "Useful to defend against any foes"),
-    "map": Item("Map", "A guide to your next adventure!")
+    "map": Item("Map", "A guide to your next adventure!"),
+    "treasure": Item("Treasure", "This is The Count of Monte Cristo's treasure!")
 }
 
 
@@ -49,6 +54,8 @@ room["overlook"].s_to = room["foyer"]
 room["narrow"].w_to = room["foyer"]
 room["narrow"].n_to = room["treasure"]
 room["treasure"].s_to = room["narrow"]
+room["treasure"].n_to = room["trapdoor"]
+room["trapdoor"].s_to = room["treasure"]
 
 #
 # Main
@@ -119,6 +126,8 @@ while redPill == True:
             player.current_room = getattr(player.current_room, 'n_to')
         elif player.current_room == room["narrow"]:
             player.current_room = getattr(player.current_room, 'n_to')
+        elif player.current_room == room["treasure"]:
+            player.current_room = getattr(player.current_room, 'n_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
     elif move == "e":
@@ -132,6 +141,8 @@ while redPill == True:
         if player.current_room == room["overlook"]:
             player.current_room = getattr(player.current_room, 's_to')
         if player.current_room == room["treasure"]:
+            player.current_room = getattr(player.current_room, 's_to')
+        if player.current_room == room["trapdoor"]:
             player.current_room = getattr(player.current_room, 's_to')
         else:
             print("Hmm, I don't think we should go that way. Enter one of the following commands to get going: \nn => Go North \ne => Go East \ns => Go South \nw => Go West")
